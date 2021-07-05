@@ -2,8 +2,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: sans-serif;
+  overflow-x: hidden;
 }
 
 a {
@@ -13,4 +13,34 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+
+.ant-input {
+  padding: 1rem 1.2rem !important;
+  border-radius: 8px !important;
+}
+.ant-select-selector {
+    padding: 2rem 1.2rem !important;
+    border-radius: 8px !important;
+}
+.ant-btn {
+  width: 100%;
+  height: 60px;
+  background: #0480fc !important;
+  border-radius: 8px !important;
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+@media screen and (min-width: 768px){
+  .ant-input {
+    padding: 1.2rem !important;
+  }
+  .ant-select-selector  {
+      padding: 2.3rem 1.2rem !important;
+  }
+  .ant-btn {
+    width: 100%;
+  }
 }
