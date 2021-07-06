@@ -35,7 +35,7 @@ const Register = () => {
          }
 
          if(errMsg === undefined){
-             await fetch(`https://apitest.trav4college.com/v1/register`, {
+             await fetch("https://cors-anywhere.herokuapp.com/https://apitest.trav4college.com/v1/register", {
               method: "POST",
               "Content-Type": "text/html",
               body: JSON.stringify({first_name, last_name, email, phone, password, device_name, confirm_password})})
