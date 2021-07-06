@@ -14,6 +14,23 @@ a {
 * {
   box-sizing: border-box;
 }
+.messages {
+    width: 76%;
+    height: auto;
+    padding: 1.5rem;
+    text-align: center;
+    color: #fafafa;
+    margin-bottom: 1rem;
+}
+
+.errors {
+    background: rgb(199, 64, 64);
+
+}
+
+.success {
+  background: rgb(35, 121, 35);
+}
 
 
 .ant-input {
@@ -33,14 +50,34 @@ a {
   font-weight: bolder;
 }
 
+
+.select_input {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+  border-radius: 8px;
+  outline: none;
+}
+
+.select_input:active, .select_input:focus {
+  border: 1px solid #d9d9d9;
+  outline: none;
+}
+
+
 @media screen and (min-width: 768px){
   .ant-input {
     padding: 1.2rem !important;
   }
   .ant-select-selector  {
       padding: 2.3rem 1.2rem !important;
+
   }
   .ant-btn {
     width: 100%;
+  }
+  .select_input {
+      padding: 2rem 1.5rem;
   }
 }

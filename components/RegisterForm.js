@@ -1,31 +1,57 @@
 import { useState } from 'react'
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button } from 'antd';
 import styles from '../styles/Home.module.css';
 import Category from './Category';
-
-const { Option } = Select;
-
+import validate from '../utils/validate';
 
 const Register = () => {
+  const initialValues = {first_name: "", last_name: "", email: "", phone: "", password: "", confirm_password: "", device_name: "Macbook Pro"}
+  const [fieldsValue, setFieldsValue] = useState(initialValues)
+  const [category, setCategory] = useState(1);
+  const [errorMsg, setErrorMsg] = useState("")
+  const [successMsg, setSuccessMsg] = useState("")
+
+
+  const choice = [
+    { value: 'Yes' },
+    {  value: 'No' },
+  ];
+
+  const {first_name, last_name, email, password, confirm_password, phone, device_name} = fieldsValue;
+
+  const handleChange = (e) => {
+       const { name, value } = e.target
+       setFieldsValue({...fieldsValue, [name]: value});
+  }
+
+  const errMsg = validate(first_name, last_name, email, password, confirm_password, phone);
+  console.log(errMsg, successMsg)
+
 
   const registerUser = async () => {
-       const user = await fetch(`https://apitest.trav4college.com/v1/register`)
+    try {
+         if(errMsg && errMsg !== undefined){
+          setErrorMsg(<div className="messages errors"><p>Error(s)</p><span>{errMsg}</span>
+          </div>
+              )  
+         }
+
+         if(errMsg === undefined){
+            const user = await fetch(`https://apitest.trav4college.com/v1/register`, {
+              method: "POST",
+              "Content-Type": "text/html",
+              body: JSON.stringify({first_name, last_name, email, phone, password, device_name, confirm_password})})
+              setSuccessMsg(<div className="messages success"><p>Success</p><span>Registration was successful</span></div>)
+
+        }
+      
+    } catch (error) {
+        console.log(error.message)
+    }
+
+  
   }
-
-  const [category, setCategory] = useState(1);
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
-  const [password, setPassword] = useState("")
-  const [cf_password, setCf_Password] = useState("")
-  const [student, setStudent] = useState("Yes");
-
-  const onSubmit = e => {
-     e.preventDefault();
-     console.log(values)
-  }
-
+   
     const updateCategory = (index) => {
         setCategory(index)
     }
@@ -40,99 +66,56 @@ const Register = () => {
         }}
         className={styles.register_form}
       >
-             <Form.Item
-            name="first_name"
-            rules={[{ required: true }]}
-            className={styles.first_name}
-            >
-            <Input placeholder="First Name" type="text" value={firstname} onChange={e => setFirstName(e.target.value)}/>
-       
-            </Form.Item>
-            {firstname}
-            <Form.Item
-            name="last_name"
-            rules={[{ required: true }]}
-            className={styles.last_name}
-            >
-            <Input placeholder="Last Name" type="text" onChange={e => setLastName(e.target.value)}  value={lastname}/>
+         {errMsg && errMsg !== undefined ? errorMsg : successMsg}
+         
+          <Form.Item className={styles.first_name}>
+               <Input placeholder="First Name" type="text" value={first_name} onChange={handleChange} name="first_name"/>
+          </Form.Item>
+            <Form.Item className={styles.last_name}>
+            <Input placeholder="Last Name" type="text" onChange={handleChange}  value={last_name} name="last_name"/>
      
         </Form.Item>
-        {lastname}
-        <Form.Item
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your email address',
-            }
-          ]}
-        >
-          <Input placeholder="Email Address" type="email" value={email} onChange={e => setEmail(e.target.value)}/>
+        <Form.Item>
+          <Input placeholder="Email Address" type="email" value={email} onChange={handleChange} name="email"/>
       
         </Form.Item>
-        {email}
 
-        <Form.Item
-          name="phone"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your phone number',
-            },
-          ]}
-        >
-          <Input placeholder="Phone Number" type="text" value={phone} onChange={e => setPhone(e.target.value)}/>
+        <Form.Item>
+          <Input placeholder="Phone Number" type="text" onChange={handleChange} name="phone" value={phone} />
         </Form.Item>
-        {phone}
         
-     
      { category === 1 &&
-        <Form.Item
-          name="student"
-        >
-          <Select placeholder="Are You a High School Student" value={student} onChange={e => setStudent(e.target.value)}>
-            <Option value="Yes">Yes</Option>
-            <Option value="No">No</Option>
-          </Select>
+       <Form.Item name="students">
+          <select placeholder="Select an option"  className="select_input">
+          <option disabled defaultValue="Select an Option">Select an Option</option>
+  
+             {
+               choice.map(({value}, index) => (             
+                    <option key={index} value={value}>{value}</option>
+               ))
+             }
+          </select>
         </Form.Item>
+       
       }
   
-        <Form.Item
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
-        >
-          <Input.Password placeholder="Password" className={styles.password} value={password} onChange={e => setPassword(e.target.value)}/>
+        <Form.Item>
+          <Input.Password placeholder="Password" className={styles.password} value={password} onChange={handleChange} name="password"/>
   
         </Form.Item>
-        {password}
-        <Form.Item
-          name="confirm_password"
-          rules={[
-            {
-              required: true,
-              message: 'Please confirm your password!',
-            },
-          ]}
-        >
-          <Input.Password placeholder="Confirm Password" className={styles.password} value={cf_password} onChange={e => setCf_Password(e.target.value)}/>
+        <Form.Item>
+          <Input.Password placeholder="Confirm Password" className={styles.password} value={confirm_password} onChange={handleChange} name="confirm_password"/>
       
         </Form.Item>
-        {cf_password}
         <Form.Item
           wrapperCol={{
             span: 18,
           }}
         >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" onClick={registerUser}>
               create account
           </Button>
         </Form.Item>
-    
       </Form>
       </div>
     );
