@@ -25,8 +25,6 @@ const Register = () => {
   }
 
   const errMsg = validate(first_name, last_name, email, password, confirm_password, phone);
-  console.log(errMsg, successMsg)
-
 
   const registerUser = async () => {
     try {
